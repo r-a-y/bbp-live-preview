@@ -25,6 +25,8 @@ class bbP_Live_Preview {
 	 * Constructor.
 	 */
 	function __construct() {
+		global $tinymce_version;
+
 		// page injection
 		add_action( 'bbp_theme_before_topic_form_submit_wrapper', array( $this, 'preview' ) );
 		add_action( 'bbp_theme_before_reply_form_submit_wrapper', array( $this, 'preview' ) );
@@ -37,8 +39,10 @@ class bbP_Live_Preview {
 		add_action( 'bp_core_setup_oembed',            array( $this, 'autoembed_hacks' ) );
 
 		// tinymce setup
-		add_action( 'bbp_theme_before_reply_form',     array( $this, 'tinymce_setup' ) );
-		add_action( 'bbp_theme_before_topic_form',     array( $this, 'tinymce_setup' ) );
+		if ( version_compare( $tinymce_version, '4.0.0' ) < 0 ) {
+			add_action( 'bbp_theme_before_reply_form',     array( $this, 'tinymce_setup' ) );
+			add_action( 'bbp_theme_before_topic_form',     array( $this, 'tinymce_setup' ) );
+		}
 	}
 
 	/**
@@ -47,6 +51,14 @@ class bbP_Live_Preview {
 	 * @todo Move JS and inline CSS to static files. Allow timeout variable to be configured.
 	 */
 	public function preview() {
+		global $tinymce_version;
+
+		$type = current_filter();
+		if ( strpos( $type, 'topic' ) !== false ) {
+			$type = 'topic';
+		} else {
+			$type = 'reply';
+		}
 	?>
 
 		<label for="bbp-post-preview" style="clear:both; display:block;"><?php _e( 'Preview:', 'bbp-live-preview' ); ?></label>
@@ -77,16 +89,25 @@ class bbP_Live_Preview {
 			}
 
 			// tinymce capture
-			function bbp_preview_tinymce_capture(e) {
-				if ( e.type == 'keyup' ) {
-					var id = e.view.frameElement.id.split('_');
-
-					bbp_preview_post( e.target.innerHTML, id[1] );
+			<?php if ( version_compare( $tinymce_version, '4.0.0' ) >= 0 ) : ?>
+				window.onload = function () {
+					tinymce.get('bbp_<?php echo $type; ?>_content').on('keyup',function(e){
+						bbp_preview_post( this.getContent(), '<?php echo $type; ?>' );
+					});
 				}
-			}
+			<?php else : ?>
+				function bbp_preview_tinymce_capture(e) {
+					if ( e.type == 'keyup' ) {
+						var id = e.view.frameElement.id.split('_');
+
+						bbp_preview_post( e.target.innerHTML, id[1] );
+					}
+				}
+			<?php endif; ?>
 
 			// regular textarea capture
 			jQuery(document).ready( function($) {
+
 				$("#bbp_topic_content, #bbp_reply_content").keyup(function(){
 					var textarea = $(this);
 					var id = $(this).attr('id').split('_');
