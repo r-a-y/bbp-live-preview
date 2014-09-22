@@ -17,7 +17,7 @@ class bbP_Live_Preview {
 	/**
 	 * Init method.
 	 */
-	public function init() {
+	public static function init() {
 		return new self();
 	}
 
