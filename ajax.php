@@ -17,7 +17,7 @@ send_origin_headers();
 // Require an action parameter
 if ( empty( $_REQUEST['action'] ) )
 	die( '0' );
-	
+
 // Setup headers
 @header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );
 @header( 'X-Robots-Tag: noindex' );
