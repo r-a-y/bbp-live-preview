@@ -69,7 +69,8 @@ class bbP_Live_Preview {
 			var bbp_preview_timer   = null;
 			var bbp_preview_ajaxurl = '<?php echo plugin_dir_url( __FILE__ ) . 'ajax.php'; ?>';
 
-			function bbp_preview_post( text, type ) {
+			function bbp_preview_post( text, type, tinymce ) {
+				tinymce = typeof tinymce !== 'undefined' ? true : false;
 				clearTimeout(bbp_preview_timer);
 				bbp_preview_timer = setTimeout(function(){
 					var post = jQuery.post(
@@ -77,7 +78,8 @@ class bbP_Live_Preview {
 						{
 							action: 'bbp_live_preview',
 							'text': text,
-							'type': type
+							'type': type,
+							'tinymce' : tinymce
 						}
 					);
 
@@ -92,7 +94,7 @@ class bbP_Live_Preview {
 			<?php if ( version_compare( $tinymce_version, '4.0.0' ) >= 0 ) : ?>
 				window.onload = function () {
 					tinymce.get('bbp_<?php echo $type; ?>_content').on('keyup',function(e){
-						bbp_preview_post( this.getContent(), '<?php echo $type; ?>' );
+						bbp_preview_post( this.getContent(), '<?php echo $type; ?>', true );
 					});
 				}
 			<?php else : ?>
@@ -168,9 +170,16 @@ class bbP_Live_Preview {
 			remove_filter( "bbp_get_{$type}_content", array( $gdbbpress_attachments_front, 'embed_attachments' ), 100, 2 );
 		}
 
+		$content = stripslashes( $_POST['text'] );
+
+		// tinymce requires applying another filter
+		if ( true === (bool) $_POST['tinymce'] ) {
+			$content = apply_filters( "bbp_get_form_{$type}_content", $content );
+		}
+
 		// run bbP filters
-		$content = apply_filters( 'bbp_new_' . $type . '_pre_content', stripslashes( $_POST['text'] ) );
-		$content = apply_filters( 'bbp_get_' . $type . '_content',     stripslashes( $content ) );
+		$content = apply_filters( 'bbp_new_' . $type . '_pre_content', $content );
+		$content = apply_filters( 'bbp_get_' . $type . '_content',     $content );
 
 		echo $content;
 		die;
