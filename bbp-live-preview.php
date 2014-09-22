@@ -28,8 +28,8 @@ class bbP_Live_Preview {
 		global $tinymce_version;
 
 		// page injection
-		add_action( 'bbp_theme_before_topic_form_submit_wrapper', array( $this, 'preview' ) );
-		add_action( 'bbp_theme_before_reply_form_submit_wrapper', array( $this, 'preview' ) );
+		add_action( 'bbp_theme_after_topic_form_content', array( $this, 'preview' ) );
+		add_action( 'bbp_theme_after_reply_form_content', array( $this, 'preview' ) );
 
 		// ajax handlers
 		add_action( 'wp_ajax_bbp_live_preview'       , array( $this, 'ajax_callback' ) );
