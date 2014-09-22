@@ -141,6 +141,12 @@ class bbP_Live_Preview {
 			remove_filter( 'bbp_new_' . $type . '_pre_content', 'bbp_filter_kses' );
 		}
 
+		// Disable GD bbPress attachments plugin from preview
+		global $gdbbpress_attachments_front;
+		if ( class_exists( 'gdbbAtt_Front' ) && ! empty( $gdbbpress_attachments_front ) && is_a( $gdbbpress_attachments_front, 'gdbbAtt_Front' ) ) {
+			remove_filter( "bbp_get_{$type}_content", array( $gdbbpress_attachments_front, 'embed_attachments' ), 100, 2 );
+		}
+
 		// run bbP filters
 		$content = apply_filters( 'bbp_new_' . $type . '_pre_content', stripslashes( $_POST['text'] ) );
 		$content = apply_filters( 'bbp_get_' . $type . '_content',     stripslashes( $content ) );
