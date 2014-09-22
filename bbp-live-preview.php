@@ -61,13 +61,16 @@ class bbP_Live_Preview {
 		}
 	?>
 
-		<label for="bbp-post-preview" style="clear:both; display:block;"><?php _e( 'Preview:', 'bbp-live-preview' ); ?></label>
-		<div id="bbp-post-preview" style="border:1px solid #ababab; margin-top:.5em; padding:5px; color:#333;"></div>
+		<div id="bbp-post-preview-wrapper" style="clear:both; display:none;margin:1em auto;">
+			<label for="bbp-post-preview" style="clear:both; display:block;"><?php _e( 'Preview:', 'bbp-live-preview' ); ?></label>
+			<div id="bbp-post-preview" style="border:1px solid #ababab; margin-top:.5em; padding:5px; color:#333;"></div>
+		</div>
 
 
 		<script type="text/javascript">
-			var bbp_preview_timer   = null;
-			var bbp_preview_ajaxurl = '<?php echo plugin_dir_url( __FILE__ ) . 'ajax.php'; ?>';
+			var bbp_preview_is_visible = false;
+			var bbp_preview_timer      = null;
+			var bbp_preview_ajaxurl    = '<?php echo plugin_dir_url( __FILE__ ) . 'ajax.php'; ?>';
 
 			function bbp_preview_post( text, type, tinymce ) {
 				tinymce = typeof tinymce !== 'undefined' ? true : false;
@@ -85,6 +88,10 @@ class bbP_Live_Preview {
 
 					post.success( function (data) {
 						jQuery("#bbp-post-preview").html(data);
+                                                if ( ! bbp_preview_is_visible ) {
+                                                        jQuery( '#bbp-post-preview-wrapper' ).show();
+                                                        bbp_preview_is_visible = true;
+                                                }
 					});
 				}, 1500);
 
