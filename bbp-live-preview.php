@@ -116,6 +116,13 @@ class bbP_Live_Preview {
 
 			// regular textarea capture
 			jQuery(document).ready( function($) {
+				// override default 'hide' jQuery method to add a trigger
+				// used for the quicktags 'link' button
+				var _oldhide = $.fn.hide;
+				$.fn.hide = function(speed, callback) {
+					$(this).trigger('hide');
+					return _oldhide.apply(this,arguments);
+				}
 
 				// keyboard input
 				$(".wp-editor-container").on("keyup", "#bbp_topic_content, #bbp_reply_content", function() {
@@ -125,6 +132,20 @@ class bbP_Live_Preview {
 
 				});
 
+				// quicktags link button
+				$(document).on('hide','#wp-link-wrap', function() {
+					var textarea, type;
+					if ( $('#bbp_topic_title').length ) {
+						type = 'topic';
+
+					} else {
+						type = 'reply';
+					}
+
+					textarea = $( "#bbp_" + type + "_content");
+
+					bbp_preview_post( textarea.val(), type );
+				});
 
 			});
 		</script>
