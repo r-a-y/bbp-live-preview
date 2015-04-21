@@ -200,7 +200,8 @@ class bbP_Live_Preview {
 
 		// Remove wp_filter_kses filters from content for capable users
 		if ( current_user_can( 'unfiltered_html' ) ) {
-			remove_filter( 'bbp_new_' . $type . '_pre_content', 'bbp_filter_kses' );
+			remove_filter( "bbp_new_{$type}_pre_content", 'bbp_encode_bad',  10 );
+			remove_filter( "bbp_new_{$type}_pre_content", 'bbp_filter_kses', 30 );
 		}
 
 		// Disable GD bbPress attachments plugin from preview
