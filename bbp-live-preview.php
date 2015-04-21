@@ -180,7 +180,7 @@ class bbP_Live_Preview {
 		$content = stripslashes( $_POST['text'] );
 
 		// tinymce requires applying another filter
-		if ( true === (bool) $_POST['tinymce'] ) {
+		if ( true === filter_var( $_POST['tinymce'], FILTER_VALIDATE_BOOLEAN ) ) {
 			$content = apply_filters( "bbp_get_form_{$type}_content", $content );
 		}
 
