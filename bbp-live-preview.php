@@ -117,7 +117,8 @@ class bbP_Live_Preview {
 			// regular textarea capture
 			jQuery(document).ready( function($) {
 
-				$("#bbp_topic_content, #bbp_reply_content").keyup(function(){
+				// keyboard input
+				$(".wp-editor-container").on("keyup", "#bbp_topic_content, #bbp_reply_content", function() {
 					var textarea = $(this);
 					var id = $(this).attr('id').split('_');
 
