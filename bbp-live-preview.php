@@ -210,17 +210,19 @@ class bbP_Live_Preview {
 			remove_filter( "bbp_get_{$type}_content", array( $gdbbpress_attachments_front, 'embed_attachments' ), 100, 2 );
 		}
 
-		$content = $_POST['text'];
+		$content = stripslashes( $_POST['text'] );
+
+		// run bbP filters
+		$content = apply_filters( "bbp_new_{$type}_pre_content", $content );
 
 		// tinymce requires applying another filter
 		if ( true === filter_var( $_POST['tinymce'], FILTER_VALIDATE_BOOLEAN ) ) {
+			remove_filter( "bbp_get_form_{$type}_content", 'esc_textarea' );
+
 			$content = apply_filters( "bbp_get_form_{$type}_content", $content );
 		}
 
-		// run bbP filters
-		$content = apply_filters( 'bbp_new_' . $type . '_pre_content', $content );
-		$content = stripslashes( $content );
-		$content = apply_filters( 'bbp_get_' . $type . '_content',     $content );
+		$content = apply_filters( "bbp_get_{$type}_content", $content );
 
 		echo $content;
 		die;
