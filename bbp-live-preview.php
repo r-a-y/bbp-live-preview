@@ -120,9 +120,8 @@ class bbP_Live_Preview {
 				// keyboard input
 				$(".wp-editor-container").on("keyup", "#bbp_topic_content, #bbp_reply_content", function() {
 					var textarea = $(this);
-					var id = $(this).attr('id').split('_');
 
-					bbp_preview_post( textarea.val(), id[1] );
+					bbp_preview_post( textarea.val(), textarea.attr('id').split('_')[1] );
 
 				});
 
