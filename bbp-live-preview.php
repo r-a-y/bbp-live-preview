@@ -132,6 +132,17 @@ class bbP_Live_Preview {
 
 				});
 
+				// quicktags toolbar support
+				$(".wp-editor-container").on("click", ".quicktags-toolbar", function(e) {
+					// do not do anything for 'link' button that's handled below
+					if ( 'link' === e.target.value ) {
+						return;
+					}
+
+					var textarea = $(this).parent().find('textarea');
+					bbp_preview_post( textarea.val(), textarea.attr('id').split('_')[1] );
+				});
+
 				// quicktags link button
 				$(document).on('hide','#wp-link-wrap', function() {
 					var textarea, type;
