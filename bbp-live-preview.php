@@ -55,7 +55,7 @@ class bbP_Live_Preview {
 		echo '
             <div id="bbp-post-preview-wrapper">
                 <label for="bbp-post-preview">' . __( 'Preview:', 'bbp-live-preview' ) . '</label>
-                <div id="bbp-post-preview"></div>
+                <div id="bbp-post-preview" class="bbp-reply-content"></div>
             </div>
         ';
 	}
@@ -154,12 +154,15 @@ class bbP_Live_Preview {
 		if ( current_user_can( 'unfiltered_html' ) ) {
 			remove_filter( "bbp_new_{$type}_pre_content", 'bbp_encode_bad',  10 );
 			remove_filter( "bbp_new_{$type}_pre_content", 'bbp_filter_kses', 30 );
+		} else {
+			// We need this here for proper attributes generation
+			add_filter( "bbp_new_{$type}_pre_content", 'stripslashes', 100 );
 		}
 
 		// Disable GD bbPress attachments plugin from preview
 		global $gdbbpress_attachments_front;
 		if ( class_exists( 'gdbbAtt_Front' ) && ! empty( $gdbbpress_attachments_front ) && is_a( $gdbbpress_attachments_front, 'gdbbAtt_Front' ) ) {
-			remove_filter( "bbp_get_{$type}_content", array( $gdbbpress_attachments_front, 'embed_attachments' ), 100, 2 );
+			remove_filter( "bbp_get_{$type}_content", array( $gdbbpress_attachments_front, 'embed_attachments' ), 100 );
 		}
 
 		$content = stripslashes( $_POST['text'] );
