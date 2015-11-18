@@ -31,13 +31,13 @@ function bbp_preview_post( text, type, tinymce ) {
 
 // tinymce capture
 if ( bbpLivePreviewInfo.tinymceFourthPlusVersion ) {
-    window.onload = function () {
+    jQuery(document).load(function(){
         var formType = bbpLivePreviewInfo.formType;
         var contentSelector = 'bbp_' + formType + '_content';
         tinymce.get(contentSelector).on('keyup', function (e) {
             bbp_preview_post(this.getContent(), formType, true);
         });
-    }
+    });
 } else {
     function bbp_preview_tinymce_capture(e) {
         if (e.type == 'keyup') {
