@@ -21,7 +21,7 @@ function bbp_preview_post( text, type, tinymce ) {
         post.success( function (data) {
             jQuery("#bbp-post-preview").html(data);
             if ( ! bbp_preview_is_visible ) {
-                jQuery( '#bbp-post-preview-wrapper' ).show();
+                jQuery( '#bbp-post-preview-wrapper' ).slideDown();
                 bbp_preview_is_visible = true;
             }
             jQuery("#bbp-post-preview").removeClass('loading');
