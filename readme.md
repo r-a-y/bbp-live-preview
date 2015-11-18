@@ -21,7 +21,6 @@ Caveats
 * If autoembeds are enabled in bbPress, autoembed previews will not work without BuddyPress.
  * Why?  Because BuddyPress has a more, flexible implementation of autoembeds than WordPress.
  * Could look into including BP's embed class before public release.
-* Todo: move inline JS to static file
 
 Version
 -

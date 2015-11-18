@@ -48,120 +48,72 @@ class bbP_Live_Preview {
 	/**
 	 * Outputs the AJAX placeholder as well as the accompanying javascript.
 	 *
-	 * @todo Move JS and inline CSS to static files. Allow timeout variable to be configured.
 	 */
 	public function preview() {
-		global $tinymce_version;
+		$this->enqueue_assets();
 
+		echo '
+            <div id="bbp-post-preview-wrapper">
+                <label for="bbp-post-preview">' . __( 'Preview:', 'bbp-live-preview' ) . '</label>
+                <div id="bbp-post-preview"></div>
+            </div>
+        ';
+	}
+
+	/**
+	 * Enqueue needed styles and scripts
+	 */
+	private function enqueue_assets() {
+		wp_enqueue_script(
+				'bbp-live-preview',
+				plugins_url( 'assets/scripts.js', __FILE__ ),
+				array( 'jquery' ),
+				filemtime( plugin_dir_path( __FILE__ ) . 'assets/scripts.js' )
+		);
+		wp_localize_script(
+				'bbp-live-preview',
+				'bbpLivePreviewInfo',
+				$this->prepare_scripts_info()
+		);
+
+		wp_enqueue_style(
+				'bbp-live-preview',
+				plugins_url( 'assets/style.css', __FILE__ ),
+				array(),
+				filemtime( plugin_dir_path( __FILE__ ) .  'assets/style.css' )
+		);
+	}
+
+	/**
+	 * Prepare info needed for JS
+	 * @return array
+	 */
+	private function prepare_scripts_info() {
+		global $tinymce_version;
+		$tinymce_fourthplus_version = version_compare( $tinymce_version, '4.0.0' ) >= 0;
+
+		$scripts_info = array(
+				'formType' => $this->get_form_type(),
+				'tinymceFourthPlusVersion' => $tinymce_fourthplus_version ,
+				'ajaxUrl' => plugin_dir_url( __FILE__ ) . 'ajax.php'
+		);
+
+		return $scripts_info;
+	}
+
+	/**
+	 * Get form type
+	 * @return string
+	 */
+	private function get_form_type() {
 		$type = current_filter();
 		if ( strpos( $type, 'topic' ) !== false ) {
 			$type = 'topic';
 		} else {
 			$type = 'reply';
 		}
-	?>
 
-		<div id="bbp-post-preview-wrapper" style="clear:both; display:none;margin:1em auto;">
-			<label for="bbp-post-preview" style="clear:both; display:block;"><?php _e( 'Preview:', 'bbp-live-preview' ); ?></label>
-			<div id="bbp-post-preview" style="border:1px solid #ababab; margin-top:.5em; padding:5px; color:#333;"></div>
-		</div>
-
-
-		<script type="text/javascript">
-			var bbp_preview_is_visible = false;
-			var bbp_preview_timer      = null;
-			var bbp_preview_ajaxurl    = '<?php echo plugin_dir_url( __FILE__ ) . 'ajax.php'; ?>';
-
-			function bbp_preview_post( text, type, tinymce ) {
-				tinymce = typeof tinymce !== 'undefined' ? true : false;
-				clearTimeout(bbp_preview_timer);
-				bbp_preview_timer = setTimeout(function(){
-					var post = jQuery.post(
-						bbp_preview_ajaxurl,
-						{
-							action: 'bbp_live_preview',
-							'text': text,
-							'type': type,
-							'tinymce' : tinymce
-						}
-					);
-
-					post.success( function (data) {
-						jQuery("#bbp-post-preview").html(data);
-                                                if ( ! bbp_preview_is_visible ) {
-                                                        jQuery( '#bbp-post-preview-wrapper' ).show();
-                                                        bbp_preview_is_visible = true;
-                                                }
-					});
-				}, 1500);
-
-			}
-
-			// tinymce capture
-			<?php if ( version_compare( $tinymce_version, '4.0.0' ) >= 0 ) : ?>
-				window.onload = function () {
-					tinymce.get('bbp_<?php echo $type; ?>_content').on('keyup',function(e){
-						bbp_preview_post( this.getContent(), '<?php echo $type; ?>', true );
-					});
-				}
-			<?php else : ?>
-				function bbp_preview_tinymce_capture(e) {
-					if ( e.type == 'keyup' ) {
-						var id = e.view.frameElement.id.split('_');
-
-						bbp_preview_post( e.target.innerHTML, id[1] );
-					}
-				}
-			<?php endif; ?>
-
-			// regular textarea capture
-			jQuery(document).ready( function($) {
-				// override default 'hide' jQuery method to add a trigger
-				// used for the quicktags 'link' button
-				var _oldhide = $.fn.hide;
-				$.fn.hide = function(speed, callback) {
-					$(this).trigger('hide');
-					return _oldhide.apply(this,arguments);
-				}
-
-				// keyboard input
-				$(".wp-editor-container").on("keyup", "#bbp_topic_content, #bbp_reply_content", function() {
-					var textarea = $(this);
-
-					bbp_preview_post( textarea.val(), textarea.attr('id').split('_')[1] );
-
-				});
-
-				// quicktags toolbar support
-				$(".wp-editor-container").on("click", ".quicktags-toolbar", function(e) {
-					// do not do anything for 'link' button that's handled below
-					if ( 'link' === e.target.value ) {
-						return;
-					}
-
-					var textarea = $(this).parent().find('textarea');
-					bbp_preview_post( textarea.val(), textarea.attr('id').split('_')[1] );
-				});
-
-				// quicktags link button
-				$(document).on('hide','#wp-link-wrap', function() {
-					var textarea, type;
-					if ( $('#bbp_topic_title').length ) {
-						type = 'topic';
-
-					} else {
-						type = 'reply';
-					}
-
-					textarea = $( "#bbp_" + type + "_content");
-
-					bbp_preview_post( textarea.val(), type );
-				});
-
-			});
-		</script>
-
-	<?php
+		return $type;
 	}
 
 	/**

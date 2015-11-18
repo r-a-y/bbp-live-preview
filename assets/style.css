@@ -1,0 +1,17 @@
+#bbp-post-preview-wrapper {
+    clear:   both;
+    display: none;
+    margin:  1em auto;
+}
+
+#bbp-post-preview-wrapper label {
+    clear:   both;
+    display: block;
+}
+
+#bbp-post-preview {
+    border:     1px solid #ababab;
+    margin-top: .5em;
+    padding:    5px;
+    color:      #333;
+}
