@@ -24,6 +24,7 @@ function bbp_preview_post( text, type, tinymce ) {
                 jQuery( '#bbp-post-preview-wrapper' ).show();
                 bbp_preview_is_visible = true;
             }
+            jQuery("#bbp-post-preview").removeClass('loading');
         });
     }, 1500);
 
@@ -61,7 +62,7 @@ jQuery(document).ready( function($) {
     // keyboard input
     $(".wp-editor-container").on("keyup", "#bbp_topic_content, #bbp_reply_content", function() {
         var textarea = $(this);
-
+        jQuery("#bbp-post-preview").addClass('loading');
         bbp_preview_post( textarea.val(), textarea.attr('id').split('_')[1] );
 
     });
@@ -74,6 +75,7 @@ jQuery(document).ready( function($) {
         }
 
         var textarea = $(this).parent().find('textarea');
+        jQuery("#bbp-post-preview").addClass('loading');
         bbp_preview_post( textarea.val(), textarea.attr('id').split('_')[1] );
     });
 
@@ -88,7 +90,7 @@ jQuery(document).ready( function($) {
         }
 
         textarea = $( "#bbp_" + type + "_content");
-
+        jQuery("#bbp-post-preview").addClass('loading');
         bbp_preview_post( textarea.val(), type );
     });
 

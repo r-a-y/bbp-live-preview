@@ -14,4 +14,13 @@
     margin-top: .5em;
     padding:    5px;
     color:      #333;
+    min-height: 20px;
+}
+
+#bbp-post-preview.loading {
+    background: transparent url("ajax-loader.gif") no-repeat scroll 50% 50%;
+}
+
+#bbp-post-preview.loading * {
+    opacity: 0.2;
 }
