@@ -95,7 +95,7 @@ class bbP_Live_Preview {
 		$scripts_info = array(
 				'formType' => $this->get_form_type(),
 				'tinymceFourthPlusVersion' => $tinymce_fourthplus_version ,
-				'ajaxUrl' => plugin_dir_url( __FILE__ ) . 'ajax.php'
+				'ajaxUrl' => admin_url( 'admin-ajax.php' )
 		);
 
 		return $scripts_info;
