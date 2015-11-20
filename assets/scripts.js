@@ -25,6 +25,7 @@ function bbp_preview_post( text, type, tinymce ) {
                 bbp_preview_is_visible = true;
             }
             jQuery("#bbp-post-preview").removeClass('loading');
+            jQuery("#bbp-post-preview").trigger('loaded');
         });
     }, 1500);
 
