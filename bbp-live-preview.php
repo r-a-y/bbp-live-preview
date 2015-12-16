@@ -154,10 +154,10 @@ class bbP_Live_Preview {
 		if ( current_user_can( 'unfiltered_html' ) ) {
 			remove_filter( "bbp_new_{$type}_pre_content", 'bbp_encode_bad',  10 );
 			remove_filter( "bbp_new_{$type}_pre_content", 'bbp_filter_kses', 30 );
-		} else {
-			// We need this here for proper attributes generation
-			add_filter( "bbp_new_{$type}_pre_content", 'stripslashes', 100 );
 		}
+
+		// We need this here for proper attributes generation
+		add_filter( "bbp_new_{$type}_pre_content", 'stripslashes', 100 );
 
 		// Disable GD bbPress attachments plugin from preview
 		global $gdbbpress_attachments_front;
@@ -165,7 +165,7 @@ class bbP_Live_Preview {
 			remove_filter( "bbp_get_{$type}_content", array( $gdbbpress_attachments_front, 'embed_attachments' ), 100 );
 		}
 
-		$content = stripslashes( $_POST['text'] );
+		$content = $_POST['text'];
 
 		// run bbP filters
 		$content = apply_filters( "bbp_new_{$type}_pre_content", $content );
