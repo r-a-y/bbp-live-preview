@@ -9,17 +9,12 @@
     display: block;
 }
 
-#bbp-post-preview-wrapper #bbp-post-preview {
-    border:     1px solid #ccc;
+#bbp-post-preview {
+    border:     1px solid #ababab;
     margin-top: .5em;
     padding:    5px;
     color:      #333;
     min-height: 20px;
-    margin-left: 0;
-}
-
-#bbp-post-preview-wrapper #bbp-post-preview code {
-    font-size: 100%;
 }
 
 #bbp-post-preview.loading {

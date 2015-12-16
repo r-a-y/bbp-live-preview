@@ -55,7 +55,7 @@ class bbP_Live_Preview {
 		echo '
             <div id="bbp-post-preview-wrapper">
                 <label for="bbp-post-preview">' . __( 'Preview:', 'bbp-live-preview' ) . '</label>
-                <div id="bbp-post-preview" class="bbp-reply-content"></div>
+                <div id="bbp-post-preview"></div>
             </div>
         ';
 	}
