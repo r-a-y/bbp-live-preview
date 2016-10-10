@@ -27,6 +27,9 @@ class bbP_Live_Preview {
 	function __construct() {
 		global $tinymce_version;
 
+		// assets
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+
 		// page injection
 		add_action( 'bbp_theme_after_topic_form_content', array( $this, 'preview' ) );
 		add_action( 'bbp_theme_after_reply_form_content', array( $this, 'preview' ) );
@@ -50,8 +53,6 @@ class bbP_Live_Preview {
 	 *
 	 */
 	public function preview() {
-		$this->enqueue_assets();
-
 		echo '
             <div id="bbp-post-preview-wrapper">
                 <label for="bbp-post-preview">' . __( 'Preview:', 'bbp-live-preview' ) . '</label>
@@ -61,9 +62,13 @@ class bbP_Live_Preview {
 	}
 
 	/**
-	 * Enqueue needed styles and scripts
+	 * Enqueue needed styles and scripts.
 	 */
-	private function enqueue_assets() {
+	public function enqueue_assets() {
+		if ( false === $this->get_bbpress_type() ) {
+			return;
+		}
+
 		wp_enqueue_script(
 				'bbp-live-preview',
 				plugins_url( 'assets/scripts.js', __FILE__ ),
@@ -73,7 +78,11 @@ class bbP_Live_Preview {
 		wp_localize_script(
 				'bbp-live-preview',
 				'bbpLivePreviewInfo',
-				$this->prepare_scripts_info()
+				array(
+					'formType' => $this->get_bbpress_type(),
+					'tinymceFourthPlusVersion' => version_compare( $GLOBALS['tinymce_version'], '4.0.0' ) >= 0,
+					'ajaxUrl' => admin_url( 'admin-ajax.php' )
+				)
 		);
 
 		wp_enqueue_style(
@@ -85,35 +94,36 @@ class bbP_Live_Preview {
 	}
 
 	/**
-	 * Prepare info needed for JS
-	 * @return array
+	 * Get bbPress type to use.
+	 *
+	 * Handles both bbPress and BuddyPress group forums.
+	 *
+	 * @return string|bool String of the post type we want to use. Boolean false on failure.
 	 */
-	private function prepare_scripts_info() {
-		global $tinymce_version;
-		$tinymce_fourthplus_version = version_compare( $tinymce_version, '4.0.0' ) >= 0;
+	private function get_bbpress_type() {
+		// Check if we're on a topic.
+		if ( bbp_is_single_topic() ) {
+			return 'reply';
 
-		$scripts_info = array(
-				'formType' => $this->get_form_type(),
-				'tinymceFourthPlusVersion' => $tinymce_fourthplus_version ,
-				'ajaxUrl' => admin_url( 'admin-ajax.php' )
-		);
-
-		return $scripts_info;
-	}
-
-	/**
-	 * Get form type
-	 * @return string
-	 */
-	private function get_form_type() {
-		$type = current_filter();
-		if ( strpos( $type, 'topic' ) !== false ) {
-			$type = 'topic';
-		} else {
-			$type = 'reply';
+		/*
+		 * Topic check for BuddyPress group forums workaround.
+		 *
+		 * @see https://bbpress.trac.wordpress.org/ticket/2974
+		 */
+		} elseif ( function_exists( 'bp_is_group' ) && bp_is_group() && 'topic' === bp_action_variable() && bp_action_variable( 1 ) ) {
+			return 'reply';
 		}
 
-		return $type;
+		// Check if we're on a forum.
+		if ( bbp_is_single_forum() ) {
+			return 'topic';
+
+		// Forum check for BuddyPress group forums.
+		} elseif ( function_exists( 'bp_is_group' ) && bp_is_group() && bp_is_current_action( 'forum' ) ) {
+			return 'topic';
+		}
+
+		return false;
 	}
 
 	/**
