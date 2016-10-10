@@ -13,7 +13,8 @@ function bbp_preview_post( text, type, tinymce ) {
 				action: 'bbp_live_preview',
 				'text': text,
 				'type': type,
-				'tinymce' : tinymce
+				'tinymce' : tinymce,
+				'ajaxNonce' : bbpLivePreviewInfo.ajaxNonce
 			}
 		);
 

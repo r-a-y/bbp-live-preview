@@ -84,7 +84,8 @@ EOD;
 				array(
 					'type'       => $this->get_bbpress_type(),
 					'isTinyMCE4' => version_compare( $GLOBALS['tinymce_version'], '4.0.0' ) >= 0,
-					'ajaxUrl'    => admin_url( 'admin-ajax.php' )
+					'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
+					'ajaxNonce'  => wp_create_nonce( 'bbp-live-preview-nonce' )
 				)
 		);
 
@@ -139,8 +140,12 @@ EOD;
 	public function ajax_callback() {
 		$type = $_POST['type'];
 
-		if ( empty( $type ) )
+		if ( empty( $type ) ) {
 			die();
+		}
+
+		// Verify nonce.
+		check_ajax_referer( 'bbp-live-preview-nonce', 'ajaxNonce' );
 
 		// if autoembeds are allowed and BP exists, allow autoembeds in preview
 		//
