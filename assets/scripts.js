@@ -24,7 +24,7 @@ function bbp_preview_post( text, type, tinymce ) {
 
 			preview.html(data);
 			if ( ! bbp_preview_is_visible ) {
-				wrapper.slideDown();
+				wrapper[bbpLivePreviewInfo.animation];
 
 				bbp_preview_is_visible = true;
 			}

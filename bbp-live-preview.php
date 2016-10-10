@@ -72,12 +72,20 @@ EOD;
 			return;
 		}
 
+		/**
+		 * Filters the animation when the preview container is shown.
+		 *
+		 * @param string $animation Should be a jQuery method name such as 'slideDown'. Default: 'show'.
+		 */
+		$animation = apply_filters( 'bbp_live_preview_animation', 'show' );
+
 		wp_enqueue_script(
 				'bbp-live-preview',
 				plugins_url( 'assets/scripts.js', __FILE__ ),
 				array( 'jquery' ),
 				filemtime( plugin_dir_path( __FILE__ ) . 'assets/scripts.js' )
 		);
+
 		wp_localize_script(
 				'bbp-live-preview',
 				'bbpLivePreviewInfo',
@@ -85,7 +93,8 @@ EOD;
 					'type'       => $this->get_bbpress_type(),
 					'isTinyMCE4' => version_compare( $GLOBALS['tinymce_version'], '4.0.0' ) >= 0,
 					'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
-					'ajaxNonce'  => wp_create_nonce( 'bbp-live-preview-nonce' )
+					'ajaxNonce'  => wp_create_nonce( 'bbp-live-preview-nonce' ),
+					'animation'  => $animation
 				)
 		);
 
