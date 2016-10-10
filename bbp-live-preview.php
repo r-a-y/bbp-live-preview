@@ -79,6 +79,13 @@ EOD;
 		 */
 		$animation = apply_filters( 'bbp_live_preview_animation', 'show' );
 
+		/**
+		 * Filters the timeout value when the preview container should be shown.
+		 *
+		 * @param int $timeout Timeout value in milliseconds. Default: 1500.
+		 */
+		$timeout = (int) apply_filters( 'bbp_live_preview_timeout', 1500 );
+
 		wp_enqueue_script(
 				'bbp-live-preview',
 				plugins_url( 'assets/scripts.js', __FILE__ ),
@@ -94,7 +101,8 @@ EOD;
 					'isTinyMCE4' => version_compare( $GLOBALS['tinymce_version'], '4.0.0' ) >= 0,
 					'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
 					'ajaxNonce'  => wp_create_nonce( 'bbp-live-preview-nonce' ),
-					'animation'  => $animation
+					'animation'  => $animation,
+					'timeout'    => $timeout
 				)
 		);
 

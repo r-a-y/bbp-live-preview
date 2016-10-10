@@ -31,7 +31,7 @@ function bbp_preview_post( text, type, tinymce ) {
 			preview.removeClass('loading');
 			preview.trigger('loaded.bbp_live_preview');
 		});
-	}, 1500);
+	}, bbpLivePreviewInfo.timeout );
 
 }
 
