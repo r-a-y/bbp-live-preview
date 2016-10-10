@@ -49,16 +49,19 @@ class bbP_Live_Preview {
 	}
 
 	/**
-	 * Outputs the AJAX placeholder as well as the accompanying javascript.
-	 *
+	 * Outputs the HTML preview placeholder.
 	 */
 	public function preview() {
-		echo '
-            <div id="bbp-post-preview-wrapper">
-                <label for="bbp-post-preview">' . __( 'Preview:', 'bbp-live-preview' ) . '</label>
-                <div id="bbp-post-preview"></div>
-            </div>
-        ';
+		$label  = esc_html__( 'Preview:', 'bbp-live-preview' );
+		$markup = <<<EOD
+
+	<div id="bbp-post-preview-wrapper">
+		<label for="bbp-post-preview">{$label}</label>
+		<div id="bbp-post-preview"></div>
+	</div>
+
+EOD;
+		echo $markup;
 	}
 
 	/**
