@@ -19,13 +19,17 @@ function bbp_preview_post( text, type, tinymce ) {
 		);
 
 		post.success( function (data) {
-			jQuery("#bbp-post-preview").html(data);
+			var preview = jQuery('#bbp-post-preview'),
+				wrapper = jQuery('#bbp-post-preview-wrapper');
+
+			preview.html(data);
 			if ( ! bbp_preview_is_visible ) {
-				jQuery( '#bbp-post-preview-wrapper' ).slideDown();
+				wrapper.slideDown();
+
 				bbp_preview_is_visible = true;
 			}
-			jQuery("#bbp-post-preview").removeClass('loading');
-			jQuery("#bbp-post-preview").trigger('loaded.bbp_live_preview');
+			preview.removeClass('loading');
+			preview.trigger('loaded.bbp_live_preview');
 		});
 	}, 1500);
 
