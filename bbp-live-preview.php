@@ -79,9 +79,9 @@ class bbP_Live_Preview {
 				'bbp-live-preview',
 				'bbpLivePreviewInfo',
 				array(
-					'formType' => $this->get_bbpress_type(),
-					'tinymceFourthPlusVersion' => version_compare( $GLOBALS['tinymce_version'], '4.0.0' ) >= 0,
-					'ajaxUrl' => admin_url( 'admin-ajax.php' )
+					'type'       => $this->get_bbpress_type(),
+					'isTinyMCE4' => version_compare( $GLOBALS['tinymce_version'], '4.0.0' ) >= 0,
+					'ajaxUrl'    => admin_url( 'admin-ajax.php' )
 				)
 		);
 

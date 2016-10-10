@@ -32,12 +32,11 @@ function bbp_preview_post( text, type, tinymce ) {
 }
 
 // tinymce capture
-if ( bbpLivePreviewInfo.tinymceFourthPlusVersion ) {
+if ( bbpLivePreviewInfo.isTinyMCE4 ) {
 	jQuery(document).load(function(){
-		var formType = bbpLivePreviewInfo.formType;
-		var contentSelector = 'bbp_' + formType + '_content';
+		var contentSelector = 'bbp_' + bbpLivePreviewInfo.type + '_content';
 		tinymce.get(contentSelector).on('keyup', function (e) {
-			bbp_preview_post(this.getContent(), formType, true);
+			bbp_preview_post(this.getContent(), bbpLivePreviewInfo.type, true);
 		});
 	});
 } else {
