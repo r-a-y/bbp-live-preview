@@ -1,6 +1,5 @@
 var bbp_preview_is_visible = false;
 var bbp_preview_timer      = null;
-var bbp_preview_ajaxurl    = bbpLivePreviewInfo.ajaxUrl;
 
 function bbp_preview_post( text, type, tinymce ) {
 	tinymce = typeof tinymce !== 'undefined';
@@ -9,7 +8,7 @@ function bbp_preview_post( text, type, tinymce ) {
 	// @todo Allow timeout variable to be configured.
 	bbp_preview_timer = setTimeout(function(){
 		var post = jQuery.post(
-			bbp_preview_ajaxurl,
+			bbpLivePreviewInfo.ajaxUrl,
 			{
 				action: 'bbp_live_preview',
 				'text': text,
