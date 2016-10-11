@@ -5,7 +5,6 @@ function bbp_preview_post( text, type, tinymce ) {
 	tinymce = typeof tinymce !== 'undefined';
 	clearTimeout(bbp_preview_timer);
 
-	// @todo Allow timeout variable to be configured.
 	bbp_preview_timer = setTimeout(function(){
 		var post = jQuery.post(
 			bbpLivePreviewInfo.ajaxUrl,
