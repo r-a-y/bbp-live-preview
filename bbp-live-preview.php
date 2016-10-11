@@ -27,6 +27,7 @@ class bbP_Live_Preview {
 	function __construct() {
 		// assets
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+		add_action( 'wp_head',            array( $this, 'inline_css' ) );
 
 		// page injection
 		add_action( 'bbp_theme_after_topic_form_content', array( $this, 'preview' ) );
@@ -107,6 +108,25 @@ EOD;
 				array(),
 				filemtime( plugin_dir_path( __FILE__ ) .  'assets/style.css' )
 		);
+	}
+
+	/**
+	 * Inline CSS to use WordPress' built-in spinner.gif.
+	 */
+	public function inline_css() {
+		if ( false === $this->get_bbpress_type() ) {
+			return;
+		}
+
+		$gif = includes_url( '/images/spinner.gif' );
+
+		$inline_css = <<<EOD
+
+#bbp-post-preview.loading { background-image: url("{$gif}"); }
+
+EOD;
+
+		printf( '<style type="text/css">%s</style>', $inline_css );
 	}
 
 	/**

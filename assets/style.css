@@ -19,7 +19,7 @@
 }
 
 #bbp-post-preview.loading {
-	background: transparent url("ajax-loader.gif") no-repeat scroll 50% 50%
+	background: transparent no-repeat scroll 50% 50%;
 }
 
 #bbp-post-preview.loading * {
