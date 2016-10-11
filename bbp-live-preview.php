@@ -75,6 +75,7 @@ EOD;
 		 * @param string $animation Should be a jQuery method name such as 'slideDown'. Default: 'show'.
 		 */
 		$animation = apply_filters( 'bbp_live_preview_animation', 'show' );
+		$animation = sanitize_title( $animation );
 
 		/**
 		 * Filters the timeout value when the preview container should be shown.
