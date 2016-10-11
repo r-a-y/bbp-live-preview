@@ -6,7 +6,7 @@ A plugin for bbPress that allows users to preview their forum post before submit
 Works with the fancy editor (TinyMCE) and the the regular textarea.
 
 **Minimum requirements:** WordPress 3.5, bbPress 2.2.4  
-**Tested up to:** WordPress 3.5+, bbPress 2.3-bleeding
+**Tested up to:** WordPress 4.7+, bbPress 2.6-bleeding
 
 How to use?
 - 
