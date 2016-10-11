@@ -25,8 +25,6 @@ class bbP_Live_Preview {
 	 * Constructor.
 	 */
 	function __construct() {
-		global $tinymce_version;
-
 		// assets
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 
@@ -42,10 +40,8 @@ class bbP_Live_Preview {
 		add_action( 'bp_core_setup_oembed',            array( $this, 'autoembed_hacks' ) );
 
 		// tinymce setup
-		if ( version_compare( $tinymce_version, '4.0.0' ) < 0 ) {
-			add_action( 'bbp_theme_before_reply_form',     array( $this, 'tinymce_setup' ) );
-			add_action( 'bbp_theme_before_topic_form',     array( $this, 'tinymce_setup' ) );
-		}
+		add_action( 'bbp_theme_before_reply_form', array( $this, 'tinymce_setup' ) );
+		add_action( 'bbp_theme_before_topic_form', array( $this, 'tinymce_setup' ) );
 	}
 
 	/**
@@ -97,12 +93,11 @@ EOD;
 				'bbp-live-preview',
 				'bbpLivePreviewInfo',
 				array(
-					'type'       => $this->get_bbpress_type(),
-					'isTinyMCE4' => version_compare( $GLOBALS['tinymce_version'], '4.0.0' ) >= 0,
-					'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
-					'ajaxNonce'  => wp_create_nonce( 'bbp-live-preview-nonce' ),
-					'animation'  => $animation,
-					'timeout'    => $timeout
+					'type'      => $this->get_bbpress_type(),
+					'ajaxUrl'   => admin_url( 'admin-ajax.php' ),
+					'ajaxNonce' => wp_create_nonce( 'bbp-live-preview-nonce' ),
+					'animation' => $animation,
+					'timeout'   => $timeout
 				)
 		);
 
@@ -247,13 +242,20 @@ EOD;
 	 * Register our JS function with TinyMCE.
 	 */
 	public function tinymce_callback( $mce ) {
-		$mce['handle_event_callback'] = 'bbp_preview_tinymce_capture';
+		// Older TinyMCE versions.
+		if ( version_compare( $GLOBALS['tinymce_version'], '4.0.0' ) < 0 ) {
+			$mce['handle_event_callback'] = 'bbp_preview_tinymce_capture';
+
+		// TinyMCE 4+
+		} else {
+			$mce['setup'] = 'bbp_preview_tinymce4_capture';
+		}
 
 		return $mce;
 	}
 
 	/**
-	 * Setup TinyMCE.
+	 * Set up TinyMCE.
 	 */
 	public function tinymce_setup() {
 		add_filter( 'teeny_mce_before_init', array( $this, 'tinymce_callback' ) );

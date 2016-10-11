@@ -35,21 +35,20 @@ function bbp_preview_post( text, type, tinymce ) {
 
 }
 
-// tinymce capture
-if ( bbpLivePreviewInfo.isTinyMCE4 ) {
-	jQuery(document).load(function(){
-		var contentSelector = 'bbp_' + bbpLivePreviewInfo.type + '_content';
-		tinymce.get(contentSelector).on('keyup', function (e) {
-			bbp_preview_post(this.getContent(), bbpLivePreviewInfo.type, true);
-		});
-	});
-} else {
-	function bbp_preview_tinymce_capture(e) {
-		if (e.type == 'keyup') {
-			var id = e.view.frameElement.id.split('_');
+// tinymce 4+ capture
+function bbp_preview_tinymce4_capture(ed) {
+	ed.on( 'KeyUp', function (e) {
+		jQuery("#bbp-post-preview").addClass('loading');
+		bbp_preview_post(this.getContent(), bbpLivePreviewInfo.type, true);
+	} );
+}
 
-			bbp_preview_post(e.target.innerHTML, id[1]);
-		}
+// tinymce < 4 capture
+function bbp_preview_tinymce_capture(e) {
+	if (e.type == 'keyup') {
+		var id = e.view.frameElement.id.split('_');
+
+		bbp_preview_post(e.target.innerHTML, id[1]);
 	}
 }
 
