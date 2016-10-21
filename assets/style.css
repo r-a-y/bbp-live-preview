@@ -25,3 +25,97 @@
 #bbp-post-preview.loading * {
 	opacity: 0.2;
 }
+
+/* COPIED FROM default.css */
+
+/* Clearing hack */
+#bbp-post-preview:after {
+	clear: both;
+	content: ".";
+	display: block;
+	float: none;
+	height: 0;
+	font-size: 0;
+	visibility: hidden;
+}
+
+#bbp-post-preview a {
+	background: none;
+	border: none;
+	display: inline;
+	font-weight: 400;
+	margin: 0;
+	padding: 0;
+}
+
+#bbp-post-preview h1,
+#bbp-post-preview h2,
+#bbp-post-preview h3,
+#bbp-post-preview h4,
+#bbp-post-preview h5,
+#bbp-post-preview h6 {
+	clear: none;
+	line-height: 1em;
+	margin: 24px 0;
+	padding: 0;
+}
+
+#bbp-post-preview img {
+	max-width: 100%;
+	height: auto;
+}
+
+#bbp-post-preview ul,
+#bbp-post-preview ol {
+	margin: 0 15px 15px;
+	padding: 0;
+}
+
+#bbp-post-preview ul li {
+	list-style-type: disc;
+}
+
+#bbp-post-preview ol li {
+	list-style-type: decimal;
+}
+
+#bbp-post-preview ol li li {
+	list-style-type: lower-alpha;
+}
+
+#bbp-post-preview ol li li li {
+	list-style-type: upper-roman;
+}
+
+#bbp-post-preview code,
+#bbp-post-preview pre {
+	font-family: Inconsolata, Consolas, Monaco, "Lucida Console", monospace;
+	display: inline-block;
+	background-color: #f9f9f9;
+	border: 1px solid #ddd;
+	padding: 0 5px;
+	max-width: 95%;
+	vertical-align: middle;
+	margin-top: -3px;
+	overflow-x: auto;
+}
+
+#bbp-post-preview pre {
+	display: block;
+	line-height: 18px;
+	margin: 0 0 24px;
+	padding: 5px 10px;
+	white-space: pre;
+	overflow: auto;
+}
+
+#bbp-post-preview pre code {
+	display: block;
+	border: none;
+	padding: 0;
+	margin: 0;
+	background-color: transparent;
+	overflow-wrap: normal;
+	overflow: auto;
+	max-width: 100%;
+}
