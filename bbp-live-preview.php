@@ -54,7 +54,7 @@ class bbP_Live_Preview {
 
 	<div id="bbp-post-preview-wrapper">
 		<label for="bbp-post-preview">{$label}</label>
-		<div id="bbp-post-preview"></div>
+		<div id="bbp-post-preview" class="bbp-reply-content"></div>
 	</div>
 
 EOD;
