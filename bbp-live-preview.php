@@ -207,9 +207,6 @@ EOD;
 			remove_filter( "bbp_new_{$type}_pre_content", 'bbp_filter_kses', 30 );
 		}
 
-		// We need this here for proper attributes generation
-		add_filter( "bbp_new_{$type}_pre_content", 'stripslashes', 100 );
-
 		// Disable GD bbPress attachments plugin from preview
 		global $gdbbpress_attachments_front;
 		if ( class_exists( 'gdbbAtt_Front' ) && ! empty( $gdbbpress_attachments_front ) && is_a( $gdbbpress_attachments_front, 'gdbbAtt_Front' ) ) {
@@ -219,7 +216,7 @@ EOD;
 		$content = $_POST['text'];
 
 		// run bbP filters
-		$content = apply_filters( "bbp_new_{$type}_pre_content", $content );
+		$content = apply_filters( "bbp_new_{$type}_pre_content", stripslashes( $content ) );
 
 		// tinymce requires applying another filter
 		if ( true === filter_var( $_POST['tinymce'], FILTER_VALIDATE_BOOLEAN ) ) {
