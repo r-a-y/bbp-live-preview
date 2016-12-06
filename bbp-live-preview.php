@@ -215,11 +215,27 @@ EOD;
 
 		$content = $_POST['text'];
 
+		/*
+		 * TinyMCE adds paragraph tags to the textarea value.
+		 *
+		 * This doesn't gel with bbp_encode_bad(), which is hooked to
+		 * "bbp_new_{$type}_pre_content".  So whitelist the <p> element and also add
+		 * wpautop(), so paragraphs are correctly displayed.
+		 */
+		if ( true === filter_var( $_POST['tinymce'], FILTER_VALIDATE_BOOLEAN ) && ! current_user_can( 'unfiltered_html' ) ) {
+			add_filter( 'bbp_kses_allowed_tags', array( $this, 'bbp_allowed_tags_whitelist_p' ) );
+			add_filter( "bbp_new_{$type}_pre_content", 'wpautop' );
+		}
+
 		// run bbP filters
 		$content = apply_filters( "bbp_new_{$type}_pre_content", stripslashes( $content ) );
 
 		// tinymce requires applying another filter
 		if ( true === filter_var( $_POST['tinymce'], FILTER_VALIDATE_BOOLEAN ) ) {
+			if ( ! current_user_can( 'unfiltered_html' ) ) {
+				remove_filter( 'bbp_kses_allowed_tags', array( $this, 'bbp_allowed_tags_whitelist_p' ) );
+			}
+
 			remove_filter( "bbp_get_form_{$type}_content", 'esc_textarea' );
 
 			$content = apply_filters( "bbp_get_form_{$type}_content", $content );
@@ -280,6 +296,16 @@ EOD;
 		add_filter( 'tiny_mce_before_init',  array( $this, 'tinymce_callback' ) );
 	}
 
+	/**
+	 * Whitelist <p> tag for use with bbP's allowed HTML tags.
+	 *
+	 * @param  array $tags Whitelisted HTML tags.
+	 * @return array
+	 */
+	public function bbp_allowed_tags_whitelist_p( $tags ) {
+		$tags['p'] = array();
+		return $tags;
+	}
 }
 
 add_action( 'bbp_includes', array( 'bbP_Live_Preview', 'init' ) );
