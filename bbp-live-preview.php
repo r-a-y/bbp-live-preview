@@ -240,7 +240,7 @@ EOD;
 
 			$content = apply_filters( "bbp_get_form_{$type}_content", $content );
 		}
-
+		$content = apply_filters( 'post_content', $content, 0, 'display' );
 		$content = apply_filters( "bbp_get_{$type}_content", $content );
 
 		echo $content;
