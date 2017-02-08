@@ -227,8 +227,10 @@ EOD;
 			add_filter( "bbp_new_{$type}_pre_content", 'wpautop' );
 		}
 
+		add_filter( "bbp_new_{$type}_pre_content", 'stripslashes', 999 );
+
 		// run bbP filters
-		$content = apply_filters( "bbp_new_{$type}_pre_content", stripslashes( $content ) );
+		$content = apply_filters( "bbp_new_{$type}_pre_content", $content );
 
 		// tinymce requires applying another filter
 		if ( true === filter_var( $_POST['tinymce'], FILTER_VALIDATE_BOOLEAN ) ) {
