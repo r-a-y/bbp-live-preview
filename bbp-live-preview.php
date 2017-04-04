@@ -201,6 +201,9 @@ EOD;
 			add_filter( 'embed_post_id', create_function( '', 'return 1;' ) );
 		}
 
+		// We're not in the admin area.
+		remove_filter( "bbp_get_{$type}_content", 'bbp_kses_data' );
+
 		// Remove wp_filter_kses filters from content for capable users
 		if ( current_user_can( 'unfiltered_html' ) ) {
 			remove_filter( "bbp_new_{$type}_pre_content", 'bbp_encode_bad',  10 );
