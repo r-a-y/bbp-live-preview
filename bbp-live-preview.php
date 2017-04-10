@@ -225,7 +225,7 @@ EOD;
 		 * "bbp_new_{$type}_pre_content".  So whitelist the <p> element and also add
 		 * wpautop(), so paragraphs are correctly displayed.
 		 */
-		if ( true === filter_var( $_POST['tinymce'], FILTER_VALIDATE_BOOLEAN ) && ! current_user_can( 'unfiltered_html' ) ) {
+		if ( true === filter_var( $_POST['tinymce'], FILTER_VALIDATE_BOOLEAN ) ) {
 			add_filter( 'bbp_kses_allowed_tags', array( $this, 'bbp_allowed_tags_whitelist_p' ) );
 			add_filter( "bbp_new_{$type}_pre_content", 'wpautop' );
 		}
