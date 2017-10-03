@@ -290,6 +290,32 @@ EOD;
 			$mce['setup'] = 'bbp_preview_tinymce4_capture';
 		}
 
+		/**
+		 * When using paste, strip elements not matching bbPress KSES.
+		 *
+		 * This should probably exist outside bbP Live Preview, but whatever.
+		 */
+		$mce['paste_preprocess'] = "function(plugin, args){
+			var whitelist = '" . implode(',', array_keys( bbp_kses_allowed_tags() ) ) . "',
+				stripped = jQuery('<div>' + args.content + '</div>');
+
+			// Replace <b> with <strong>
+			stripped.find('b').replaceWith(function(i,content){
+				return '<strong>' + content + '</strong>';
+			});
+
+			// Remove elements not on the whitelist.
+			stripped.find('*').not(whitelist).each(function(i, element) {
+				jQuery(this).contents().unwrap();
+			});
+
+			// Strip all class and id attributes.
+			stripped.find('*').removeAttr('id').removeAttr('class');
+
+			// Return the clean HTML.
+			args.content = stripped.html();
+		}";
+
 		return $mce;
 	}
 
