@@ -198,7 +198,9 @@ EOD;
 
 			// hack: provide a dummy post ID so embeds will run
 			// this is important!
-			add_filter( 'embed_post_id', create_function( '', 'return 1;' ) );
+			add_filter( 'embed_post_id', function() {
+				return 1;
+			} );
 		}
 
 		// We're not in the admin area.
