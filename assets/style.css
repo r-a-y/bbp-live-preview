@@ -16,6 +16,10 @@
 	min-height: 20px;
 }
 
+#bbp-post-preview a {
+	word-break: break-all;
+}
+
 #bbpress-forums #bbp-post-preview {
 	margin: .5em 0 0 0;
 	padding: 5px;
